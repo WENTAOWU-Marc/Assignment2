@@ -1,6 +1,9 @@
 import userModel from '../api/users/userModel';
 import movieModel from '../api/movies/movieModel';
-import {movies} from './movies.js';
+import upcomingModel from '../api/upcomingMovies/upcomingModel';
+import nowplayingModel from '../api/nowplayingMovies/nowplayingModel';
+import { movies } from './movies.js';
+import { getUpcomingMovies, getNowPlayingMovies } from '../api/tmdb-api';
 
 const users = [
   {
@@ -16,14 +19,14 @@ const users = [
 // deletes all user documents in collection and inserts test data
 export async function loadUsers() {
   console.log('load user Data');
-    try {
-      await userModel.deleteMany();
-      await users.forEach(user => userModel.create(user));
-      console.info(`${users.length} users were successfully stored.`);
-    } catch (err) {
-      console.error(`failed to Load user Data: ${err}`);
-    }
+  try {
+    await userModel.deleteMany();
+    await users.forEach(user => userModel.create(user));
+    console.info(`${users.length} users were successfully stored.`);
+  } catch (err) {
+    console.error(`failed to Load user Data: ${err}`);
   }
+}
 
 // deletes all movies documents in collection and inserts test data
 export async function loadMovies() {
@@ -38,13 +41,27 @@ export async function loadMovies() {
   }
 }
 
-export async function loadNowplayingMovies() {
-  console.log('load seed data');
-  console.log(nowplayingmovies.length);
+export async function loadUpcomingMovies() {
+  console.log('load upcomingmovies');
   try {
-    await movieModel.deleteMany();
-    await movieModel.collection.insertMany(nowplayingmovies);
-    console.info(`${nowplayingmovies.length} Nowplayingmovies were successfully stored.`);
+    getUpcomingMovies().then(async res => {
+      await upcomingModel.deleteMany();
+      await upcomingModel.collection.insertMany(res);
+      console.info(`${res.length} Upcomingmovies were successfully stored.`);
+    })
+  } catch (err) {
+    console.error(`failed to Load upcomingmovie Data: ${err}`);
+  }
+}
+
+export async function loadNowplayingMovies() {
+  console.log('load nowplayingmovies');
+  try {
+    getNowPlayingMovies().then(async res => {
+      await nowplayingModel.deleteMany();
+      await nowplayingModel.collection.insertMany(res);
+      console.info(`${res.length} Nowplayingmovies were successfully stored.`);
+    })
   } catch (err) {
     console.error(`failed to Load nowplayingmovie Data: ${err}`);
   }
