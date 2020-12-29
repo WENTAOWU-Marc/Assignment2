@@ -6,10 +6,11 @@ import './db';
 import session from 'express-session';
 import passport from './authenticate';
 import loglevel from 'loglevel';
-import {loadUsers, loadMovies, loadUpcomingMovies, loadNowplayingMovies} from './seedData';
+import {loadUsers, loadMovies, loadUpcomingMovies, loadNowplayingMovies, loadPeople} from './seedData';
 import usersRouter from './api/users';
 import upcomingRouter from './api/upcomingMovies';
 import nowplayingRouter from './api/nowplayingMovies';
+import peopleRouter from './api/people';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ if (process.env.SEED_DB === 'true' && process.env.NODE_ENV === 'development') {
   loadMovies();
   loadUpcomingMovies();
   loadNowplayingMovies();
+  loadPeople();
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -55,6 +57,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
 app.use('/api/upcomingMovies',passport.authenticate('jwt', {session: false}), upcomingRouter);
 app.use('/api/nowplayingMovies', nowplayingRouter);
+app.use('/api/people',peopleRouter);
 app.use(errHandler);
 
 let server = app.listen(port, () => {

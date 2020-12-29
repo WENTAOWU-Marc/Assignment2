@@ -47,13 +47,13 @@ describe("Movies endpoint", () => {
   describe("GET /movies ", () => {
     it("should return 20 movies and a status 200", (done) => {
       request(api)
-        .get("/api/movies")
+        .get("/api/movies?Token=eyJhbGciOiJIUzI1NiJ9.dXNlcjE.FmYria8wq0aFDHnzYWhKQrhF5BkJbFNN1PqNyNQ7V4M")
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(200)
         .end((err, res) => {
-        //   expect(res.body).to.be.a("array");
-        //   expect(res.body.length).to.equal(20);
+          expect(res.body).to.be.a("array");
+          expect(res.body.length).to.equal(20);
           done();
         });
     });
