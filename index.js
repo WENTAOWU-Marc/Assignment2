@@ -3,19 +3,28 @@ import express from 'express';
 import moviesRouter from './api/movies';
 import bodyParser from 'body-parser';
 import './db';
+import session from 'express-session';
+import passport from './authenticate';
+import loglevel from 'loglevel';
+import {loadUsers, loadMovies, loadUpcomingMovies, loadNowplayingMovies} from './seedData';
 import usersRouter from './api/users';
 import upcomingRouter from './api/upcomingMovies';
 import nowplayingRouter from './api/nowplayingMovies';
-import session from 'express-session';
-import passport from './authenticate';
-import {loadUsers, loadMovies, loadUpcomingMovies, loadNowplayingMovies} from './seedData';
 
 dotenv.config();
 
-const app = express();
+if (process.env.NODE_ENV === 'test') {
+  loglevel.setLevel('warn')
+} else {
+  loglevel.setLevel('info')
+}
 
-// eslint-disable-next-line no-undef
-const port = process.env.PORT;
+if (process.env.SEED_DB === 'true' && process.env.NODE_ENV === 'development') {
+  loadUsers();
+  loadMovies();
+  loadUpcomingMovies();
+  loadNowplayingMovies();
+}
 
 // eslint-disable-next-line no-unused-vars
 const errHandler = (err, req, res, next) => {
@@ -28,19 +37,15 @@ const errHandler = (err, req, res, next) => {
   res.status(500).send(`Hey!! You caught the error 👍👍, ${err.stack} `);
 };
 
-// eslint-disable-next-line no-undef
-if (process.env.SEED_DB) {
-  loadUsers();
-  loadMovies();
-  loadUpcomingMovies();
-  loadNowplayingMovies();
-}
+const app = express();
 
-app.use(session({
-  secret: 'ilikecake',
-  resave: true,
-  saveUninitialized: true
-}));
+const port = process.env.PORT ;
+
+// app.use(session({
+//   secret: 'ilikecake',
+//   resave: true,
+//   saveUninitialized: true
+// }));
 
 app.use(passport.initialize());
 app.use(bodyParser.json());
@@ -52,7 +57,8 @@ app.use('/api/upcomingMovies',passport.authenticate('jwt', {session: false}), up
 app.use('/api/nowplayingMovies', nowplayingRouter);
 app.use(errHandler);
 
-
-app.listen(port, () => {
-  console.info(`Server running at ${port}`);
+let server = app.listen(port, () => {
+  loglevel.info(`Server running at ${port}`);
 });
+
+module.exports = server

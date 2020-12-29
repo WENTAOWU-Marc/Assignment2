@@ -65,29 +65,29 @@ describe("Users endpoint", () => {
     });
   });
 
-  describe("POST / ", () => {
-    it("should return a 200 status and the confirmation message", () => {
-      return request(api)
-        .post("/api/users")
-        .send({
-          username: "user3",
-          password: "test3",
-        })
-        .expect(200)
-        .expect({ success: true, token: "FakeTokenForNow" });
-    });
-    after(() => {
-      return request(api)
-        .get("/api/users")
-        .set("Accept", "application/json")
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .then((res) => {
-          expect(res.body).to.be.a("array");
-          expect(res.body.length).to.equal(3);
-          let result = res.body.map((user) => user.username);
-          expect(result).to.have.members(["user1", "user2", "user3"]);
-        });
-    });
-  });
+  // describe("POST / ", () => {
+  //   it("should return a 200 status and the confirmation message", () => {
+  //     return request(api)
+  //       .post("/api/users")
+  //       .send({
+  //         username: "user3",
+  //         password: "test3",
+  //       })
+  //       .expect(200)
+  //       .expect({ success: true, token: "FakeTokenForNow" });
+  //   });
+  //   after(() => {
+  //     return request(api)
+  //       .get("/api/users")
+  //       .set("Accept", "application/json")
+  //       .expect("Content-Type", /json/)
+  //       .expect(200)
+  //       .then((res) => {
+  //         expect(res.body).to.be.a("array");
+  //         expect(res.body.length).to.equal(3);
+  //         let result = res.body.map((user) => user.username);
+  //         expect(result).to.have.members(["user1", "user2", "user3"]);
+  //       });
+  //   });
+  // });
 });
