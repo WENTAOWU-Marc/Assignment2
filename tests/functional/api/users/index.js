@@ -71,8 +71,8 @@ describe("Users endpoint", () => {
         })
         .expect(401)
         .end((err,res) => {
-          console.log(res);
-          expect(res.body.msg).to.equal("Successful created new user");
+          // console.log(res);
+          expect(res.body.msg).to.equal("Successful created new user.");
         });
     });
       // after(() => {
