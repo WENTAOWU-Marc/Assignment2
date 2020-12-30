@@ -1,28 +1,24 @@
 import chai from "chai";
 import request from "supertest";
-import Movies from "../../../../api/movies/movieModel";
-import { movies } from "../../../../seedData/movies";
-
 const expect = chai.expect;
-const mongoose = require("mongoose");
-
-let db;
-let api;
 let token;
+let api;
 
-// const sampleMovie = {
-//   id: 337401,
-//   title: "Mulan",
-// };
+const sampleMovie = {
+  id: 337401,
+  title: "Mulan",
+};
 
 describe("Movies endpoint", () => {
-  before(() => {
-    // mongoose.connect(process.env.mongoDB, {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    // });
-    // db = mongoose.connection;
 
+  beforeEach( function(done){
+    this.timeout(6000)
+    try {
+      api = require("../../../../index");
+    } catch (err) {
+      console.error(`failed to Load user Data: ${err}`);
+    }
+    setTimeout(()=>{
       request(api)
       .post("/api/users")
       .send({
@@ -30,62 +26,55 @@ describe("Movies endpoint", () => {
         "password":"test1"
       })
       .end((err,res)=>{
+        // console.log(res.body);
         token = res.body.token;
-        console.log(token);
+        // console.log(token);
         done();
-  });
-});
-
-  after(async () => {
-    try {
-      await db.dropDatabase();
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  beforeEach(async () => {
-    try {
-      api = require("../../../../index");
-      await Movies.deleteMany({});
-      await Movies.collection.insertMany(movies);
-    } catch (err) {
-      console.error(`failed to Load user Data: ${err}`);
-    }
+    });
+      },4000)
+    
   });
   afterEach(() => {
-    api.close();
+    api.close(); // Release PORT 8080
     delete require.cache[require.resolve("../../../../index")];
   });
-
   describe("GET /movies ", () => {
-    // before((done) => {
-    //   request(api)
-    //   .post("/api/users")
-    //   .send({
-    //     "username":"user1",
-    //     "password":"test1"
-    //   })
-    //   .end((err,res)=>{
-    //     token = res.body.token;
-    //     console.log(token);
-    //     done();
-    //   });
-    // });
-
-    it("should return 20 movies and a status 200", (done) => {
-      request(api)
+    it("should return 20 movies and a status 200", () => {
+        request(api)
         .get("/api/movies")
         .set("Accept", "application/json")
-        .set("Authorization","BEARER eyJhbGciOiJIUzI1NiJ9.dXNlcjE.FmYria8wq0aFDHnzYWhKQrhF5BkJbFNN1PqNyNQ7V4M")
+        .set("Authorization", token)
         .expect("Content-Type", /json/)
         .expect(200)
         .end((err, res) => {
-          // expect(res.body).to.be.a("array");
-          // expect(res.body.length).to.equal(20);
-          console.log(res);
-          done();
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(20);
         });
+      });
+    });
+
+  describe("GET /movies/:id", () => {
+    describe("when the id is valid", () => {
+      it("should return the matching movie", () => {
+        return request(api)
+          .get(`/api/movies/${sampleMovie.id}`)
+          .set("Accept", "application/json")
+          .set("Authorization", token)
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then((res) => {
+            expect(res.body).to.have.property("title", sampleMovie.title);
+          });
+      });
+    });
+    describe("when the id is invalid", () => {
+      it("should return the NOT found message", () => {
+        return request(api)
+          .get("/api/movies/100")
+          .set("Accept", "application/json")
+          .set("Authorization", token)
+          .expect('')
+      });
     });
   });
 });
