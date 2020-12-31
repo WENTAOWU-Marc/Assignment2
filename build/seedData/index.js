@@ -9,6 +9,7 @@ exports.loadUsers = loadUsers;
 exports.loadMovies = loadMovies;
 exports.loadUpcomingMovies = loadUpcomingMovies;
 exports.loadNowplayingMovies = loadNowplayingMovies;
+exports.loadPeople = loadPeople;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -21,6 +22,8 @@ var _movieModel = _interopRequireDefault(require("../api/movies/movieModel"));
 var _upcomingModel = _interopRequireDefault(require("../api/upcomingMovies/upcomingModel"));
 
 var _nowplayingModel = _interopRequireDefault(require("../api/nowplayingMovies/nowplayingModel"));
+
+var _peopleModel = _interopRequireDefault(require("../api/people/peopleModel"));
 
 var _movies = require("./movies.js");
 
@@ -224,4 +227,59 @@ function _loadNowplayingMovies() {
     }, _callee6);
   }));
   return _loadNowplayingMovies.apply(this, arguments);
+}
+
+function loadPeople() {
+  return _loadPeople.apply(this, arguments);
+}
+
+function _loadPeople() {
+  _loadPeople = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
+    return _regenerator["default"].wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            console.log('load nowplayingmovies');
+
+            try {
+              (0, _tmdbApi.getActors)().then( /*#__PURE__*/function () {
+                var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(res) {
+                  return _regenerator["default"].wrap(function _callee7$(_context7) {
+                    while (1) {
+                      switch (_context7.prev = _context7.next) {
+                        case 0:
+                          _context7.next = 2;
+                          return _peopleModel["default"].deleteMany();
+
+                        case 2:
+                          _context7.next = 4;
+                          return _peopleModel["default"].collection.insertMany(res);
+
+                        case 4:
+                          console.info("".concat(res.length, " actors were successfully stored."));
+
+                        case 5:
+                        case "end":
+                          return _context7.stop();
+                      }
+                    }
+                  }, _callee7);
+                }));
+
+                return function (_x3) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            } catch (err) {
+              console.error("failed to Load actor Data: ".concat(err));
+            }
+
+          case 2:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+  return _loadPeople.apply(this, arguments);
 }

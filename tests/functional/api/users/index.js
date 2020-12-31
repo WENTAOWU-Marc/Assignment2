@@ -1,7 +1,11 @@
 import chai from "chai";
 import request from "supertest";
+const mongoose = require("mongoose");
+import User from "../../../../api/users/userModel";
+
 const expect = chai.expect;
 
+let db;
 let api;
 
 const users = [
@@ -16,18 +20,33 @@ const users = [
 ];
 
 describe("Users endpoint", () => {
-  beforeEach(function (done) {
-    this.timeout(6000)
+  before(() => {
+    mongoose.connect(process.env.mongoDB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    db = mongoose.connection;
+  });
+
+  // after(async () => {
+  //   try {
+  //     await db.dropDatabase();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
+
+  beforeEach(async () => {
     try {
       api = require("../../../../index");
+      await User.deleteMany({});
+      await User.collection.insertMany(users);
     } catch (err) {
       console.error(`failed to Load user Data: ${err}`);
     }
-    done();
   });
-
   afterEach(() => {
-    api.close(); // Release PORT 8080
+    api.close();
     delete require.cache[require.resolve("../../../../index")];
   });
 

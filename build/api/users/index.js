@@ -97,7 +97,6 @@ router.post('/', /*#__PURE__*/function () {
             user.comparePassword(req.body.password, function (err, isMatch) {
               if (isMatch && !err) {
                 // if user is found and password is right create a token
-                // eslint-disable-next-line no-undef
                 var token = _jsonwebtoken["default"].sign(user.username, process.env.SECRET); // return the information including token as JSON
 
 

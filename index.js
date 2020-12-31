@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'test') {
   loglevel.setLevel('info')
 }
 
-if (process.env.SEED_DB === 'true' && process.env.NODE_ENV === 'development') {
+if (process.env.SEED_DB === 'true') {
   loadUsers();
   loadMovies();
   loadUpcomingMovies();
