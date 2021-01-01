@@ -13,27 +13,27 @@ const sampleMovie = {
 
 describe("Movies endpoint", () => {
 
-  beforeEach(function(done){
+  beforeEach(function (done) {
     this.timeout(6000)
     try {
       api = require("../../../../index");
     } catch (err) {
       console.error(`failed to Load user Data: ${err}`);
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       request(api)
-      .post("/api/users")
-      .send({
-        "username":"user1",
-        "password":"test1"
-      })
-      .end((err,res)=>{
-        // console.log(res.body);
-        token = res.body.token;
-        // console.log(token);
-        done();
-    });
-      },4000)
+        .post("/api/users")
+        .send({
+          "username": "user1",
+          "password": "test1"
+        })
+        .end((err, res) => {
+          // console.log(res.body);
+          token = res.body.token;
+          // console.log(token);
+          done();
+        });
+    }, 4000)
   });
 
   // beforeEach(async () => {

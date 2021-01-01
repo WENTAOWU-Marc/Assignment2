@@ -56,8 +56,8 @@ app.use(express.static('public'));
 app.use('/api/users', usersRouter);
 app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
 app.use('/api/upcomingMovies',passport.authenticate('jwt', {session: false}), upcomingRouter);
-app.use('/api/nowplayingMovies', nowplayingRouter);
-app.use('/api/people',peopleRouter);
+app.use('/api/nowplayingMovies', passport.authenticate('jwt', {session: false}), nowplayingRouter);
+app.use('/api/people',passport.authenticate('jwt', {session: false}), peopleRouter);
 app.use(errHandler);
 
 let server = app.listen(port, () => {
