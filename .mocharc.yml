@@ -3,7 +3,7 @@ file:
     - 'tests/functional/api/users/index.js'
     - 'tests/functional/api/upcomingMovies/index.js'
     - 'tests/functional/api/people/index.js'
-
+    - 'tests/functional/api/nowplayingMovies/index.js'
 require: '@babel/register'
 exit: true
 timeout: 4000

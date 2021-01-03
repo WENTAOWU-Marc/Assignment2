@@ -6,12 +6,12 @@ const expect = chai.expect;
 let token;
 let api;
 
-const upcomingMovie = {
+const nowplayingMovie = {
     id : 464052,
     title: "Wonder Woman 1984"
 };
 
-describe("Upcoming movies endpoint", () => {
+describe("Nowplaying movies endpoint", () => {
     beforeEach(function (done) {
         this.timeout(6000)
         try {
@@ -38,10 +38,10 @@ describe("Upcoming movies endpoint", () => {
         delete require.cache[require.resolve("../../../../index")];
     });
 
-    describe("GET /upcomingMovies ", () => {
-        it("should return 20 upcomingmovies and a status 200", () => {
+    describe("GET /nowplayingMovies ", () => {
+        it("should return 20 nowplayingmovies and a status 200", () => {
             request(api)
-                .get("/api/upcomingMovies")
+                .get("/api/nowplayingMovies")
                 .set("Accept", "application/json")
                 .set("Authorization", token)
                 .expect("Content-Type", /json/)
@@ -53,24 +53,24 @@ describe("Upcoming movies endpoint", () => {
         });
     });
 
-    describe("GET /upcomingMovies/:id", () => {
+    describe("GET /nowplayingMovies/:id", () => {
         describe("when the id is valid", () => {
             it("should return the matching movie", () => {
                 return request(api)
-                    .get(`/api/upcomingMovies/${upcomingMovie.id}`)
+                    .get(`/api/nowplayingMovies/${nowplayingMovie.id}`)
                     .set("Accept", "application/json")
                     .set("Authorization", token)
                     .expect("Content-Type", /json/)
                     .expect(200)
                     .then((res) => {
-                        expect(res.body).to.have.property("title", upcomingMovie.title);
+                        expect(res.body).to.have.property("title", nowplayingMovie.title);
                     });
             });
         });
         describe("when the id is invalid", () => {
             it("should return the NOT found message", () => {
                 return request(api)
-                    .get("/api/upcomingMovies/100")
+                    .get("/api/nowplayingMovies/100")
                     .set("Accept", "application/json")
                     .set("Authorization", token)
                     .expect('')
