@@ -28,39 +28,16 @@ describe("Movies endpoint", () => {
           "password": "test1"
         })
         .end((err, res) => {
-          // console.log(res.body);
           token = res.body.token;
-          // console.log(token);
           done();
         });
     }, 4000)
   });
 
-  // beforeEach(async () => {
-  //   try {
-  //     api = require("../../../../index");
-  //     request(api)
-  //       .post("/api/users?action=authenticate")
-  //       .send({
-  //         "username": "user1",
-  //         "password": "test1"
-  //       })
-  //       .end((err, res) => {
-  //         // console.log(res.body);
-  //         token = res.body.token;
-  //         // console.log(token);    
-  //       });
-  //   }
-  //   catch (err) {
-  //     console.error(`failed to Load user Data: ${err}`);
-  //   }
-  // });
-
   afterEach(() => {
     api.close(); // Release PORT 8080
     delete require.cache[require.resolve("../../../../index")];
   });
-
 
   describe("GET /movies ", () => {
     it("should return 20 movies and a status 200", () => {

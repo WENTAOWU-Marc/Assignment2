@@ -6,12 +6,12 @@ const expect = chai.expect;
 let token;
 let api;
 
-const upcomingMovie = {
-    id : 464052,
-    title: "Wonder Woman 1984"
+const sampleActor = {
+    id: 31,
+    name : "Tom Hanks"
 };
 
-describe("Movies endpoint", () => {
+describe("People endpoints", () => {
     beforeEach(function (done) {
         this.timeout(6000)
         try {
@@ -38,39 +38,39 @@ describe("Movies endpoint", () => {
         delete require.cache[require.resolve("../../../../index")];
     });
 
-    describe("GET /upcomingMovies ", () => {
-        it("should return 20 upcomingmovies and a status 200", () => {
+    describe("GET/people", () => {
+        it("should return 20 people and a status 200", () => {
             request(api)
-                .get("/api/upcomingMovies")
+                .get("/api/people")
                 .set("Accept", "application/json")
                 .set("Authorization", token)
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
-                    expect(res.body.length).to.deep.equal(20);
+                    expect(res.body.length).to.equal(20);
                 });
         });
     });
 
-    describe("GET /upcomingMovies/:id", () => {
+    describe("GET/people/:id", () => {
         describe("when the id is valid", () => {
-            it("should return the matching movie", () => {
+            it("should return the matching person", () => {
                 return request(api)
-                    .get(`/api/upcomingMovies/${upcomingMovie.id}`)
+                    .get(`/api/people/${sampleActor.id}`)
                     .set("Accept", "application/json")
                     .set("Authorization", token)
                     .expect("Content-Type", /json/)
                     .expect(200)
                     .then((res) => {
-                        expect(res.body).to.have.property("title", upcomingMovie.title);
+                        expect(res.body).to.have.property("name", sampleActor.name);
                     });
             });
         });
         describe("when the id is invalid", () => {
             it("should return the NOT found message", () => {
                 return request(api)
-                    .get("/api/upcomingMovies/100")
+                    .get("/api/people/100")
                     .set("Accept", "application/json")
                     .set("Authorization", token)
                     .expect('')
