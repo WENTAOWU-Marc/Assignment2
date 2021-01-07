@@ -48,7 +48,7 @@ describe("Nowplaying movies endpoint", () => {
                 .expect(200)
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
-                    expect(res.body.length).to.deep.equal(20);
+                    expect(res.body.length).to.equal(20);
                 });
         });
     });

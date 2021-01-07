@@ -74,8 +74,12 @@ app.use('/api/movies', _authenticate["default"].authenticate('jwt', {
 app.use('/api/upcomingMovies', _authenticate["default"].authenticate('jwt', {
   session: false
 }), _upcomingMovies["default"]);
-app.use('/api/nowplayingMovies', _nowplayingMovies["default"]);
-app.use('/api/people', _people["default"]);
+app.use('/api/nowplayingMovies', _authenticate["default"].authenticate('jwt', {
+  session: false
+}), _nowplayingMovies["default"]);
+app.use('/api/people', _authenticate["default"].authenticate('jwt', {
+  session: false
+}), _people["default"]);
 app.use(errHandler);
 var server = app.listen(port, function () {
   _loglevel["default"].info("Server running at ".concat(port));
