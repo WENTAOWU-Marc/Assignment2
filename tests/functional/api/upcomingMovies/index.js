@@ -39,7 +39,7 @@ describe("Upcoming movies endpoint", () => {
     });
 
     describe("GET /upcomingMovies ", () => {
-        it("should return 20 upcomingmovies and a status 200", () => {
+        it("should return 20 upcomingmovies and a status 200", (done) => {
             request(api)
                 .get("/api/upcomingMovies")
                 .set("Accept", "application/json")
@@ -49,6 +49,7 @@ describe("Upcoming movies endpoint", () => {
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
                     expect(res.body.length).to.deep.equal(20);
+                    done();
                 });
         });
     });

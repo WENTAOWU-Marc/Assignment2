@@ -7,7 +7,7 @@ let token;
 let api;
 
 const nowplayingMovie = {
-    id : 464052,
+    id: 464052,
     title: "Wonder Woman 1984"
 };
 
@@ -39,16 +39,18 @@ describe("Nowplaying movies endpoint", () => {
     });
 
     describe("GET /nowplayingMovies ", () => {
-        it("should return 20 nowplayingmovies and a status 200", () => {
+        it("should return 20 nowplayingmovies and a status 200", (done) => {
             request(api)
-                .get("/api/nowplayingMovies")
+                .get(`/api/nowplayingMovies`)
                 .set("Accept", "application/json")
                 .set("Authorization", token)
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
+                    console.log(res.body);
                     expect(res.body.length).to.equal(20);
+                    done();
                 });
         });
     });

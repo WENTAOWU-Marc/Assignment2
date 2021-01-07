@@ -8,7 +8,7 @@ let api;
 
 const sampleActor = {
     id: 31,
-    name : "Tom Hanks"
+    name: "Tom Hanks"
 };
 
 describe("People endpoints", () => {
@@ -39,7 +39,7 @@ describe("People endpoints", () => {
     });
 
     describe("GET/people", () => {
-        it("should return 20 people and a status 200", () => {
+        it.only("should return 20 people and a status 200", (done) => {
             request(api)
                 .get("/api/people")
                 .set("Accept", "application/json")
@@ -49,6 +49,7 @@ describe("People endpoints", () => {
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
                     expect(res.body.length).to.equal(20);
+                    done();
                 });
         });
     });
