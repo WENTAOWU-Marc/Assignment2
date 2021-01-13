@@ -39,7 +39,7 @@ describe("People endpoints", () => {
     });
 
     describe("GET/people", () => {
-        it.only("should return 20 people and a status 200", (done) => {
+        it("should return 20 people and a status 200", (done) => {
             request(api)
                 .get("/api/people")
                 .set("Accept", "application/json")
