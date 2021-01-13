@@ -9,7 +9,10 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 _dotenv["default"].config(); // Connect to database
 
 
-_mongoose["default"].connect(process.env.mongoDB);
+_mongoose["default"].connect(process.env.mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 var db = _mongoose["default"].connection;
 db.on('error', function (err) {

@@ -25,6 +25,10 @@ var UserSchema = new Schema({
   favourites: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'Movies'
+  }],
+  watchList: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'Upcomings'
   }]
 });
 

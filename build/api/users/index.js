@@ -19,6 +19,8 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _movieModel = _interopRequireDefault(require("../movies/movieModel"));
 
+var _upcomingModel = _interopRequireDefault(require("../upcomingMovies/upcomingModel"));
+
 var router = _express["default"].Router(); // eslint-disable-line
 // Get all users
 
@@ -203,11 +205,73 @@ router.post('/:userName/favourites', /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }());
+router.post('/:userName/watchlist', /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res, next) {
+    var newWatchList, userName, movie, user;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            newWatchList = req.body.id;
+            userName = req.params.userName;
+            _context3.next = 4;
+            return _upcomingModel["default"].findByMovieDBId(newWatchList);
+
+          case 4:
+            movie = _context3.sent;
+            _context3.next = 7;
+            return _userModel["default"].findByUserName(userName);
+
+          case 7:
+            user = _context3.sent;
+
+            if (!user.watchList.includes(movie._id)) {
+              _context3.next = 12;
+              break;
+            }
+
+            res.status(401).json({
+              code: 401,
+              msg: 'The movie has appeared'
+            });
+            _context3.next = 17;
+            break;
+
+          case 12:
+            _context3.next = 14;
+            return user.watchList.push(movie._id);
+
+          case 14:
+            _context3.next = 16;
+            return user.save();
+
+          case 16:
+            res.status(201).json(user);
+
+          case 17:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function (_x7, _x8, _x9) {
+    return _ref3.apply(this, arguments);
+  };
+}());
 router.get('/:userName/favourites', function (req, res, next) {
   var userName = req.params.userName;
 
   _userModel["default"].findByUserName(userName).populate('favourites').then(function (user) {
     return res.status(201).json(user.favourites);
+  })["catch"](next);
+});
+router.get('/:userName/watchlist', function (req, res, next) {
+  var userName = req.params.userName;
+
+  _userModel["default"].findByUserName(userName).populate('watchlist').then(function (user) {
+    return res.status(201).json(user.watchList);
   })["catch"](next);
 });
 var _default = router;

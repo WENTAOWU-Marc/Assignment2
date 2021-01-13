@@ -89,32 +89,32 @@ function _loadMovies() {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log('load seed data');
-            console.log(_movies.movies.length);
-            _context2.prev = 2;
-            _context2.next = 5;
+            console.log('load seed data'); // console.log(movies.length);
+
+            _context2.prev = 1;
+            _context2.next = 4;
             return _movieModel["default"].deleteMany();
 
-          case 5:
-            _context2.next = 7;
+          case 4:
+            _context2.next = 6;
             return _movieModel["default"].collection.insertMany(_movies.movies);
 
-          case 7:
+          case 6:
             console.info("".concat(_movies.movies.length, " Movies were successfully stored."));
-            _context2.next = 13;
+            _context2.next = 12;
             break;
 
-          case 10:
-            _context2.prev = 10;
-            _context2.t0 = _context2["catch"](2);
+          case 9:
+            _context2.prev = 9;
+            _context2.t0 = _context2["catch"](1);
             console.error("failed to Load movie Data: ".concat(_context2.t0));
 
-          case 13:
+          case 12:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[2, 10]]);
+    }, _callee2, null, [[1, 9]]);
   }));
   return _loadMovies.apply(this, arguments);
 }
