@@ -28,13 +28,6 @@ describe("Users endpoint", () => {
     db = mongoose.connection;
   });
 
-  // after(async () => {
-  //   try {
-  //     await db.dropDatabase();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // });
 
   beforeEach(async () => {
     try {
@@ -118,27 +111,48 @@ describe("Users endpoint", () => {
         .expect("Content-Type", /json/)
         .expect(201)
         .end((err, res) => {
-          expect(res.body.favourites.length).to.equal(1)
+          expect(res.body.favourites.length).to.equal(1);
           done();
         })
     });
-    // it("should return a 401 status with err msg", (done) => {
-    //   request(api)
-    //     .post("/api/users/user1/favourites")
-    //     .send({
-    //       "id": 590706
-    //     })
-    //     .post("/api/users/user1/favourites")
-    //     .send({
-    //       "id": 590706
-    //     })
-    //     .expect("Content-Type", /json/)
-    //     .expect(401)
-    //     .end((err, res) => {
-    //       console.log(res.body);
-    //       // expect(res.body.msg).to.equal("The movie has appeared")
-    //       done();
-    //     })
-    // })
+
+    it("should return a 401 status with err msg", (done) => {
+      request(api)
+        .post("/api/users/user1/favourites")
+        .send({
+          "id": 590706
+        })
+        .expect("Content-Type", /json/)
+        .end(() => {
+          request(api)
+            .post("/api/users/user1/favourites")
+            .send({
+              "id": 590706
+            })
+            .expect("Content-Type", /json/)
+            .expect(401)
+            .end((err, res) => {
+              console.log(res.body);
+              expect(res.body.msg).to.equal("The movie has appeared");
+              done();
+            })
+        });
+    });
+  });
+
+  describe("POST / watchlist", () => {
+    it("should add upcomingmovie to favourite", (done) => {
+      request(api)
+        .post("/api/users/user1/watchlist")
+        .send({
+          "id": 464052
+        })
+        .expect("Content-Type", /json/)
+        .expect(201)  
+        .end((err, res) => {
+          expect(res.body.watchList.length).to.equal(1);
+          done();
+        })
+    })
   });
 });
