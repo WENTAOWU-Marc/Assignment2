@@ -48,7 +48,6 @@ describe("Nowplaying movies endpoint", () => {
                 .expect(200)
                 .end((err, res) => {
                     expect(res.body).to.be.a("array");
-                    console.log(res.body);
                     expect(res.body.length).to.equal(20);
                     done();
                 });
