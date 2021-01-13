@@ -80,7 +80,7 @@ describe("People endpoints", () => {
     });
 
     describe("GET/people/:id/credits", () => {
-        it.only("should return the combined credits list", (done) =>{
+        it("should return the combined credits list", (done) =>{
             request(api)
             .get(`/api/people/${sampleActor.id}/credits`)
             .set("Accept", "application/json")
