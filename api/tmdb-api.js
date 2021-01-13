@@ -63,3 +63,10 @@ export const getActor = actorid =>{
   )
   .then(res => res.json())
 };
+
+export const getCombinedCredits = actorid => {
+  return fetch(
+    `https://api.themoviedb.org/3/person/${actorid}/combined_credits?api_key=${process.env.TMDB_KEY}&language=en-US`
+  )
+    .then(res => res.json())
+}
