@@ -141,17 +141,16 @@ describe("Users endpoint", () => {
   });
 
   describe("POST / watchlist", () => {
-    it("should add upcomingmovie to watchlist", (done) => {
+    it("should add upcomingmovie to watchlist", () => {
       request(api)
         .post("/api/users/user1/watchlist")
         .send({
           "id": 464052
         })
         .expect("Content-Type", /json/)
-        .expect(201)  
+        .expect(201)
         .end((err, res) => {
           expect(res.body.watchList.length).to.equal(1);
-          done();
         })
     })
   });
