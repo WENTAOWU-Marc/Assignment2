@@ -2,6 +2,7 @@ import express from 'express';
 import User from './userModel';
 import jwt from 'jsonwebtoken';
 import movieModel from '../movies/movieModel';
+import upcomingModel from '../upcomingMovies/upcomingModel';
 
 const router = express.Router(); // eslint-disable-line
 
@@ -90,10 +91,35 @@ router.post('/:userName/favourites', async (req, res, next) => {
   }
 });
 
+router.post('/:userName/watchlist',async (req, res, next) => {
+  const newWatchList =req.body.id;
+  const userName = req.params.userName;
+  const movie = await upcomingModel.findByMovieDBId(newWatchList);
+  const user = await User.findByUserName(userName);
+  if(user.watchList.includes(movie._id)){
+    res.status(401).json({
+      code: 401,
+      msg: 'The movie has appeared'
+    });
+  }
+  else{
+   await user.watchList.push(movie._id);
+   await user.save();
+   res.status(201).json(user); 
+  }
+});
+
 router.get('/:userName/favourites', (req, res, next) => {
   const userName = req.params.userName;
   User.findByUserName(userName).populate('favourites').then(
-    user => res.status(201).json(user.favourites)
+    user => res.status(201).json(user.favourites),
+  ).catch(next);
+});
+
+router.get('/:userName/watchlist', (req, res, next) => {
+  const userName = req.params.userName;
+  User.findByUserName(userName).populate('watchlist').then(
+    user => res.status(201).json(user.watchList)
   ).catch(next);
 });
 

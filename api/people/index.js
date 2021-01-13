@@ -12,4 +12,5 @@ router.get('/:id', (req, res, next) => {
   peopleModel.findByMovieDBId(id).then(people => res.status(200).send(people)).catch(next);
 });
 
+// router.get('/:id', ())
 export default router;
