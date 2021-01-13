@@ -108,7 +108,7 @@ describe("Users endpoint", () => {
     });
   });
 
-  describe.only("GET / favourites", () => {
+  describe("GET / favourites", () => {
     it("should add movie to favourite", (done) => {
       request(api)
         .post("/api/users/user1/favourites")

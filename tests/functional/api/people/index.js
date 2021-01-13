@@ -78,4 +78,20 @@ describe("People endpoints", () => {
             });
         });
     });
+
+    describe("GET/people/:id/credits", () => {
+        it.only("should return the combined credits list", (done) =>{
+            request(api)
+            .get(`/api/people/${sampleActor.id}/credits`)
+            .set("Accept", "application/json")
+            .set("Authorization", token)
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err,res) => {
+                expect(res.body.cast).to.be.a("array");
+                expect(res.body.cast.length).to.equal(179);
+                done();
+            })
+        });
+    });
 });
