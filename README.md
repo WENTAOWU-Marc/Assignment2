@@ -49,7 +49,6 @@ SEED_DB=true
 SECRET=JWTSECRET
 ```
 
-
 ## API Design
 Give an overview of your web API design, perhaps similar to the following: 
 
@@ -65,30 +64,72 @@ Give an overview of your web API design, perhaps similar to the following:
 | /api/users/{username}/watchlist | Gets the watchlist of user                 | Add movie to the watchlist | N/A | Delete movie from watchlist |
 
 ## Security and Authentication
-Give details of authentication/ security implemented on the API(e.g. passport/sessions). Indicate which routes are protected.
++ the  session is implemented in the middleware of index.js
+~~~Javascript
+app.use(session({
+  secret: 'ilikecake',
+  resave: true,
+  saveUninitialized: true
+}));
+~~~
 
++ the router is protected with passportJWT e.g.
+~~~Javascript
+app.use('/api/nowplayingMovies', passport.authenticate('jwt', {session: false}), nowplayingRouter);
+~~~
 ## Integrating with React App
 
 Describe how you integrated your React app with the API. Perhaps link to the React App repo and give an example of an API call from React App. For example: 
 
-the javascript code
+modify the the javascript code
 
 ~~~Javascript
 export const getUpcomingMovies = () => {
   return fetch(
-    '/api/upcomingMovies', {
-    headers: {
+    '/api/upcomingMovies', { headers: {
       'Authorization': window.localStorage.getItem('token')
     }
   }
-  )
-    .then(res => res.json())
-    .then(json => json.results);
+  ).then(res => res.json())
 };
 
+export const getNowPlayingMovies = () => {
+  return fetch(
+    '/api/nowplayingMovies', { headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  }
+  ).then(res => res.json())
+};
+
+export const getActors = () => {
+  return fetch(
+    '/api/people', { headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  }
+  ).then(res => res.json())
+};
+
+
+export const getActor = actorid => {
+  return fetch(
+    `/api/people/${actorid}`, { headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  }
+  ).then(res => res.json())
+}
+
+export const getCombinedCredits = actorid => {
+  return fetch(
+    `/api/people/${actorid}/credits`, { headers: {
+        'Authorization': window.localStorage.getItem('token')
+      }
+    }
+      ).then(res => res.json())
+}
 ~~~
-
-
 
 # Assignment 2 - Agile Software Practice.
 
@@ -96,29 +137,37 @@ Name: WENTAO WU
 
 ## Target Web API.
 
-...... Document the Web API that is the target for this assignment's CI/CD pipeline. Include the API's endpoints and any other features relevant to the creation of a suitable pipeline, e.g.
-
 + Get /api/movies - returns an array of movie objects.
 + Get /api/movies/:id - returns detailed information on a specific movie.
-+ Put /api/movies/:id - update a specific movie. The request payload includes the some/all of the following movie properties to be updated: title, genre list, release date.
-+ Post /api/movies - add a new movie to the database.
-+ etc.
-+ etc.  
++ Get /api/users/ - returns an array of users.
++ Post /api/users?action=register - add a new user to database
++ Post /api/users/:username/favourites - add a movie to favourite list
++ Post /api/users/:username/watchlist - add a movie to watchlist
++ Delete /api/users/:username/watchlist - delete a movie in the watchlist
++ Get /api/upcomingMovies - returns an array of upcomingmovie objects.
++ Get /api/upcomingMovies/:id - returns detailed information on a specific upcomingmovie.
++ Get /api/nowplayingMovies - returns an array of nowplayingmovie objects.
++ Get /api/nowplayingMovies/:id - returns detailed information on a specific nowplayingmovie.
++ Get /api/people - returns an array of people objects.
++ Get /api/people/:id - returns detailed information on a specific person.
++ Get /api/people/:id/credits - returns an array of combined credits of a specific peroson.
+
 
 ## Error/Exception Testing.
 
-.... From the list of endpoints above, specify those that have error/exceptional test cases in your test code, the relevant test file and the nature of the test case(s), e.g.
-
-+ Post /api/movies - test when the new movie has no title, invalid release date, empty genre list. Test adding a movie without prior authentication. See tests/functional/api/movies/index.js 
++ GET /movies/:id - test when the id is invalid. See tests/functional/api/movies.index.js
++ POST /api/users?action=register - test when the password is too simple. Test the user table after posting. See tests/functional/api/users.index.js
++ POST /api/users/user1/favourite - test when the movie is invalid and repeated.  See tests/functional/api/users.index.js
++ POST /api/users/user1/watchlist - test when the movie is repeated.  See tests/functional/api/users.index.js
++ GET /upcomingMovies/:id - test when the id is invalid. See tests/functional/api/upcomingMovies.index.js
++ GET /nowplayingMovies/:id - test when the id is invalid. See tests/functional/api/nowplayingMovies.index.js
++ GET /people/:id - test when the person id is invalid. See tests/functional/api/people.index.js
++ GET /people/:id/credits - test when the person id is invalid. See tests/functional/api/people.index.js
 
 ## Continuous Delivery/Deployment.
 
-..... Specify the URLs for the staging and production deployments of your web API, e.g.
-
-+ https://movies-api-trial-staging.herokuapp.com/ - Staging deployment
-+ https://movies-api-production.herokuapp.com/ - Production
-
-.... Show a screenshots from the overview page for the two Heroku apps e,g,
++ https://agile-assignment2.herokuapp.com/ - Staging deployment
++ https://assignment2-deploy.herokuapp.com/ - Production
 
 + Staging app overview 
 
@@ -126,13 +175,8 @@ Name: WENTAO WU
 
 + Production app overview 
 
-[ , , , screenshot here . . . ]
-
-[If an alternative platform to Heroku was used then show the relevant page from that platform's UI.]
-
-## Feature Flags (If relevant)
-
-... Specify the feature(s) in your web API that is/are controlled by a feature flag(s). Mention the source code files that contain the Optimizerly code that implement the flags. Show screenshots (with appropriate captions) from your Optimizely account that prove you successfully configured the flags.
+![][productionapp]
 
 
-[stagingapp]: ./img/stagingapp.png
+[stagingapp]: ./img/agile_stage.png
+[productionapp]: ./img/agile_production.png
