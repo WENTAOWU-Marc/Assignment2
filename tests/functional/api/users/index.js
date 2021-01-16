@@ -135,12 +135,31 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body.msg).to.equal("The movie has appeared");
               done();
+            });
+        });
+    });
+
+    it("should get favourite movie", (done) => {
+      request(api)
+        .post("/api/users/user1/favourites")
+        .send({
+          "id": 590706
+        })
+        .expect("Content-Type", /json/)
+        .end(() => {
+          request(api)
+            .get("/api/users/user1/favourites")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err, res) => {
+              expect(res.body[0].id).to.equal(590706);
+              done();
             })
         });
     });
   });
 
-  describe("POST / watchlist", () => {
+  describe("GET / watchlist", () => {
     it("should add upcomingmovie to watchlist", () => {
       request(api)
         .post("/api/users/user1/watchlist")
@@ -152,6 +171,66 @@ describe("Users endpoint", () => {
         .end((err, res) => {
           expect(res.body.watchList.length).to.equal(1);
         })
-    })
+    });
+
+    it("should return a 401 status with err msg", (done) => {
+      request(api)
+        .post("/api/users/user1/watchlist")
+        .send({
+          "id": 464052
+        })
+        .expect("Content-Type", /json/)
+        .end(() => {
+          request(api)
+            .post("/api/users/user1/watchlist")
+            .send({
+              "id": 464052
+            })
+            .expect("Content-Type", /json/)
+            .expect(401)
+            .end((err, res) => {
+              expect(res.body.msg).to.equal("The movie has appeared");
+              done();
+            })
+        });
+    });
+
+    it("should get watchlist movie", (done) => {
+      request(api)
+        .post("/api/users/user1/watchlist")
+        .send({
+          "id": 464052
+        })
+        .expect("Content-Type", /json/)
+        .end(() => {
+          request(api)
+            .get("/api/users/user1/watchlist")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err, res) => {
+              expect(res.body.length).to.equal(1);
+              done();
+            })
+        });
+    });
+
+    it("should delete watchlist movie", (done) => {
+      request(api)
+        .post("/api/users/user1/watchlist")
+        .send({
+          "id": 464052
+        })
+        .expect("Content-Type", /json/)
+        .end(() => {
+          request(api)
+            .delete("/api/users/user1/watchlist")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err, res) => {
+              expect(res.body.message).to.equal("success delete from watch list");
+              done();
+            })
+        });
+    });
   });
 });

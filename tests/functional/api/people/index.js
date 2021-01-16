@@ -89,7 +89,21 @@ describe("People endpoints", () => {
             .expect(200)
             .end((err,res) => {
                 expect(res.body.cast).to.be.a("array");
-                expect(res.body.cast.length).to.equal(179);
+                expect(res.body.cast.length).to.equal(180);
+                done();
+            })
+        });
+
+        it("should return the 34 status with error message", (done) =>{
+            request(api)
+            .get(`/api/people/xxx/credits`)
+            .set("Accept", "application/json")
+            .set("Authorization", token)
+            .expect("Content-Type", /json/)
+            .expect(34)
+            .end((err,res) => {
+                expect(res.body.success).to.equal(false);
+                expect(res.body.status_message).to.equal("The resource you requested could not be found.");
                 done();
             })
         });

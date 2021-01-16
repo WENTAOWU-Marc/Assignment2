@@ -91,21 +91,21 @@ router.post('/:userName/favourites', async (req, res, next) => {
   }
 });
 
-router.post('/:userName/watchlist',async (req, res, next) => {
-  const newWatchList =req.body.id;
+router.post('/:userName/watchlist', async (req, res, next) => {
+  const newWatchList = req.body.id;
   const userName = req.params.userName;
   const movie = await upcomingModel.findByMovieDBId(newWatchList);
   const user = await User.findByUserName(userName);
-  if(user.watchList.includes(movie._id)){
+  if (user.watchList.includes(movie._id)) {
     res.status(401).json({
       code: 401,
       msg: 'The movie has appeared'
     });
   }
-  else{
-   await user.watchList.push(movie._id);
-   await user.save();
-   res.status(201).json(user); 
+  else {
+    await user.watchList.push(movie._id);
+    await user.save();
+    res.status(201).json(user);
   }
 });
 
@@ -123,4 +123,17 @@ router.get('/:userName/watchlist', (req, res, next) => {
   ).catch(next);
 });
 
+router.delete('/:userName/watchlist', async(req, res, next) => {
+  const id = req.params.id;
+  const userName = req.params.userName;
+  const deleteMovie =  await upcomingModel.findByMovieDBId(id);
+  const user =  await User.findByUserName(userName);
+  await user.watchList.remove(deleteMovie);
+  await user.save();
+  res.status(200).json({
+    code: 200,
+    message: 'success delete from watch list'
+  })
+
+});
 export default router;
