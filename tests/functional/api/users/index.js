@@ -160,7 +160,7 @@ describe("Users endpoint", () => {
   });
 
   describe("GET / watchlist", () => {
-    it("should add upcomingmovie to watchlist", () => {
+    it("should add upcomingmovie to watchlist", (done) => {
       request(api)
         .post("/api/users/user1/watchlist")
         .send({
@@ -170,6 +170,7 @@ describe("Users endpoint", () => {
         .expect(201)
         .end((err, res) => {
           expect(res.body.watchList.length).to.equal(1);
+          done();
         })
     });
 
