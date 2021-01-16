@@ -135,7 +135,7 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body.msg).to.equal("The movie has appeared");
               done();
-            });
+            }).catch(done);
         });
     });
 
@@ -154,7 +154,7 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body[0].id).to.equal(590706);
               done();
-            })
+            });
         });
     });
   });
@@ -171,7 +171,7 @@ describe("Users endpoint", () => {
         .end((err, res) => {
           expect(res.body.watchList.length).to.equal(1);
           done();
-        })
+        }).catch(done);
     });
 
     it("should return a 401 status with err msg", (done) => {
@@ -192,7 +192,7 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body.msg).to.equal("The movie has appeared");
               done();
-            })
+            }).catch(done);
         });
     });
 
@@ -211,7 +211,7 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body.length).to.equal(1);
               done();
-            })
+            }).catch(done);
         });
     });
 
@@ -230,7 +230,7 @@ describe("Users endpoint", () => {
             .end((err, res) => {
               expect(res.body.message).to.equal("success delete from watch list");
               done();
-            })
+            }).catch(done);
         });
     });
   });
