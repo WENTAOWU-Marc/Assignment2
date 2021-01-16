@@ -274,5 +274,49 @@ router.get('/:userName/watchlist', function (req, res, next) {
     return res.status(201).json(user.watchList);
   })["catch"](next);
 });
+router["delete"]('/:userName/watchlist', /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res, next) {
+    var id, userName, deleteMovie, user;
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            id = req.params.id;
+            userName = req.params.userName;
+            _context4.next = 4;
+            return _upcomingModel["default"].findByMovieDBId(id);
+
+          case 4:
+            deleteMovie = _context4.sent;
+            _context4.next = 7;
+            return _userModel["default"].findByUserName(userName);
+
+          case 7:
+            user = _context4.sent;
+            _context4.next = 10;
+            return user.watchList.remove(deleteMovie);
+
+          case 10:
+            _context4.next = 12;
+            return user.save();
+
+          case 12:
+            res.status(200).json({
+              code: 200,
+              message: 'success delete from watch list'
+            });
+
+          case 13:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+
+  return function (_x10, _x11, _x12) {
+    return _ref4.apply(this, arguments);
+  };
+}());
 var _default = router;
 exports["default"] = _default;
