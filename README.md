@@ -75,8 +75,12 @@ app.use(session({
 
 + the router is protected with passportJWT e.g.
 ~~~Javascript
+app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
+app.use('/api/upcomingMovies',passport.authenticate('jwt', {session: false}), upcomingRouter);
 app.use('/api/nowplayingMovies', passport.authenticate('jwt', {session: false}), nowplayingRouter);
+app.use('/api/people',passport.authenticate('jwt', {session: false}), peopleRouter);
 ~~~
+
 ## Integrating with React App
 
 Describe how you integrated your React app with the API. Perhaps link to the React App repo and give an example of an API call from React App. For example: 
@@ -173,10 +177,15 @@ Name: WENTAO WU
 
 ![][stagingapp]
 
+![][stagingapp_movies]
+
 + Production app overview 
 
 ![][productionapp]
 
+![][prodctionapp_users]
 
 [stagingapp]: ./img/agile_stage.png
 [productionapp]: ./img/agile_production.png
+[stagingapp_movies]: ./img/agile_stage_movie.png
+[prodctionapp_users]: ./img/agile_production_users.png
