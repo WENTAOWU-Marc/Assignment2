@@ -85,7 +85,7 @@ app.use('/api/people',passport.authenticate('jwt', {session: false}), peopleRout
 
 Describe how you integrated your React app with the API. Perhaps link to the React App repo and give an example of an API call from React App. For example: 
 
-modify the the javascript code
+modify the the api code in react so that it will get data from the the assignment2
 
 ~~~Javascript
 export const getUpcomingMovies = () => {
